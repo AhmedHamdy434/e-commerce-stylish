@@ -22,16 +22,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-asset",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#ffffff",
-          "image": "./assets/splash-icon.png"
-        }
-      ],
-      "react-native-edge-to-edge"
-    ]
+    "plugins": ["react-native-edge-to-edge", "expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "332dcdff-2de3-4d38-b907-ef8844fd4587"
+      }
+    }
   }
 }
