@@ -1,49 +1,76 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HeaderButton, Text } from "@react-navigation/elements";
 import {
   createStaticNavigation,
   StaticParamList,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Image } from "react-native";
-import bell from "../assets/bell.png";
-import newspaper from "../assets/newspaper.png";
 import { Home } from "./screens/Home";
 import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
-import { Updates } from "./screens/Updates";
 import { NotFound } from "./screens/NotFound";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import WishList from "./screens/WishList";
+import Cart from "./screens/Cart";
+import Search from "./screens/Search";
+import { COLORS } from "../constants/theme";
+import { View, StyleSheet } from "react-native";
 
 const HomeTabs = createBottomTabNavigator({
+  screenOptions: () => ({
+    tabBarActiveTintColor: COLORS.main,
+    tabBarInactiveTintColor: COLORS.black,
+    tabBarStyle: {
+      height: 60,
+    },
+    headerShown: false,
+  }),
   screens: {
     Home: {
       screen: Home,
       options: {
-        title: "Feed",
         tabBarIcon: ({ color, size }) => (
-          <Image
-            source={newspaper}
-            tintColor={color}
-            style={{
-              width: size,
-              height: size,
-            }}
-          />
+          <Ionicons name="home" size={size} color={color} />
         ),
       },
     },
-    Updates: {
-      screen: Updates,
+    Wishlist: {
+      screen: WishList,
       options: {
         tabBarIcon: ({ color, size }) => (
-          <Image
-            source={bell}
-            tintColor={color}
-            style={{
-              width: size,
-              height: size,
-            }}
-          />
+          <MaterialIcons name="favorite-border" size={size} color={color} />
+        ),
+      },
+    },
+    Cart: {
+      screen: Cart,
+      options: {
+        tabBarIcon: ({ color, size, focused }) => (
+          <View
+            style={[
+              styles.cartIcon,
+              focused && { backgroundColor: COLORS.main },
+            ]}
+          >
+            <Ionicons name="cart-outline" size={size} color={color} />
+          </View>
+        ),
+        tabBarActiveTintColor: COLORS.white,
+        tabBarLabel: "",
+      },
+    },
+    Search: {
+      screen: Search,
+      options: {
+        tabBarIcon: ({ color, size }) => (
+          <Feather name="search" size={size} color={color} />
+        ),
+      },
+    },
+    Setting: {
+      screen: Settings,
+      options: {
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="settings-outline" size={size} color={color} />
         ),
       },
     },
@@ -56,7 +83,6 @@ const RootStack = createNativeStackNavigator({
     HomeTabs: {
       screen: HomeTabs,
       options: {
-        title: "Home",
         headerShown: false,
       },
     },
@@ -72,17 +98,17 @@ const RootStack = createNativeStackNavigator({
         },
       },
     },
-    Settings: {
-      screen: Settings,
-      options: ({ navigation }) => ({
-        presentation: "modal",
-        headerRight: () => (
-          <HeaderButton onPress={navigation.goBack}>
-            <Text>Close</Text>
-          </HeaderButton>
-        ),
-      }),
-    },
+    // Settings: {
+    //   screen: Settings,
+    //   options: ({ navigation }) => ({
+    //     presentation: "modal",
+    //     headerRight: () => (
+    //       <HeaderButton onPress={navigation.goBack}>
+    //         <Text>Close</Text>
+    //       </HeaderButton>
+    //     ),
+    //   }),
+    // },
     NotFound: {
       screen: NotFound,
       options: {
@@ -92,6 +118,23 @@ const RootStack = createNativeStackNavigator({
         path: "*",
       },
     },
+  },
+});
+
+const styles = StyleSheet.create({
+  cartIcon: {
+    position: "relative",
+    top: -8,
+    backgroundColor: COLORS.white2,
+    borderRadius: 50,
+    padding: 12,
+    width: 50,
+    height: 50,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 

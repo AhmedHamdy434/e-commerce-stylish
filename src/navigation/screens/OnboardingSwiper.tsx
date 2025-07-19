@@ -11,8 +11,6 @@ import {
 import Swiper from "react-native-swiper";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 
-const { width, height } = Dimensions.get("window");
-
 const slides = [
   {
     key: "slide1",

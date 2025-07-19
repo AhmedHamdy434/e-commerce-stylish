@@ -1,12 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  Animated,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Animated, Image, SafeAreaView, StyleSheet, Text } from "react-native";
 import { COLORS, FONTS } from "../../constants/theme";
 
 const LogoSplashScreen = ({ onFinish }: { onFinish: () => void }) => {

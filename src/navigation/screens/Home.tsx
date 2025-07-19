@@ -1,8 +1,19 @@
-import { Button, Text } from "@react-navigation/elements";
-import { TouchableOpacity } from "react-native";
-import { StyleSheet, View } from "react-native";
+import {
+  StyleSheet,
+  // TouchableOpacity,
+  // Text,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import { logout } from "../../firebase/authFunctions";
 import { useNavigation } from "@react-navigation/native";
+import NavBar from "../../components/NavBar";
+import CategoryList from "../../components/home/CategoryList";
+import { COLORS } from "../../constants/theme";
+import DealOfDay from "../../components/home/DealOfDay";
+import SliderHomeAd from "../../components/home/SliderHomeAd";
+import SpecialBanner from "../../components/home/SpecialBanner";
+import TrendingProducts from "../../components/home/TrendingProducts";
 
 export function Home() {
   const navigation = useNavigation();
@@ -10,25 +21,34 @@ export function Home() {
     await logout();
   };
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Text>Open up 'src/App.tsx' to start working on your app!</Text>
-      <Button screen="Profile" params={{ user: "jane" }}>
-        Go to Profile
-      </Button>
-      <Button screen="Settings">Go to Settings</Button>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Log out</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={styles.scrollContainer}
+      >
+        <NavBar />
+        <CategoryList />\
+        <SliderHomeAd />
+        <DealOfDay />
+        <SpecialBanner />
+        <TrendingProducts />
+        {/* <TouchableOpacity onPress={handleLogout}>
+          <Text>Log out</Text>
+        </TouchableOpacity> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: COLORS.bg,
+  },
+  scrollContainer: {
+    paddingTop: 40,
+    gap: 16,
     alignItems: "center",
-    gap: 10,
+    paddingBottom: 24,
   },
 });
