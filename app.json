@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "e-commerce",
+    "name": "Stylish",
     "slug": "e-commerce",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "scheme": "ecommerce",

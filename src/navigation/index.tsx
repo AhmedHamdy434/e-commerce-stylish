@@ -1,8 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  createStaticNavigation,
-  StaticParamList,
-} from "@react-navigation/native";
+import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Home } from "./screens/Home";
 import { Profile } from "./screens/Profile";
@@ -14,6 +11,7 @@ import Cart from "./screens/Cart";
 import Search from "./screens/Search";
 import { COLORS } from "../constants/theme";
 import { View, StyleSheet } from "react-native";
+import DetailedProduct from "./screens/DetailedProduct";
 
 const HomeTabs = createBottomTabNavigator({
   screenOptions: () => ({
@@ -29,7 +27,7 @@ const HomeTabs = createBottomTabNavigator({
       screen: Home,
       options: {
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name="home" size={size} color={color} />
+          <Feather name="home" size={size} color={color} />
         ),
       },
     },
@@ -98,17 +96,12 @@ const RootStack = createNativeStackNavigator({
         },
       },
     },
-    // Settings: {
-    //   screen: Settings,
-    //   options: ({ navigation }) => ({
-    //     presentation: "modal",
-    //     headerRight: () => (
-    //       <HeaderButton onPress={navigation.goBack}>
-    //         <Text>Close</Text>
-    //       </HeaderButton>
-    //     ),
-    //   }),
-    // },
+    Details: {
+      screen: DetailedProduct,
+      options: {
+        headerShown: false,
+      },
+    },
     NotFound: {
       screen: NotFound,
       options: {
@@ -139,9 +132,19 @@ const styles = StyleSheet.create({
 });
 
 export const Navigation = createStaticNavigation(RootStack);
-
-type RootStackParamList = StaticParamList<typeof RootStack>;
-
+export type HomeTabsParamList = {
+  Home: undefined;
+  Wishlist: undefined;
+  Cart: undefined;
+  Search: undefined;
+  Setting: undefined;
+};
+export type RootStackParamList = {
+  HomeTabs: undefined | { screen: keyof HomeTabsParamList };
+  Profile: { user: string };
+  Details: { id: string };
+  NotFound: undefined;
+};
 declare global {
   namespace ReactNavigation {
     interface RootParamList extends RootStackParamList {}

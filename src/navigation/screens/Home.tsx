@@ -1,17 +1,11 @@
-import {
-  StyleSheet,
-  // TouchableOpacity,
-  // Text,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import { logout } from "../../firebase/authFunctions";
 import { useNavigation } from "@react-navigation/native";
 import NavBar from "../../components/NavBar";
 import CategoryList from "../../components/home/CategoryList";
 import { COLORS } from "../../constants/theme";
 import DealOfDay from "../../components/home/DealOfDay";
-import SliderHomeAd from "../../components/home/SliderHomeAd";
+import Slider from "../../components/Slider";
 import SpecialBanner from "../../components/home/SpecialBanner";
 import TrendingProducts from "../../components/home/TrendingProducts";
 
@@ -20,21 +14,33 @@ export function Home() {
   const handleLogout = async () => {
     await logout();
   };
+  const slides = [
+    {
+      key: "slide1",
+      image: require("../../assets/home1.png"),
+    },
+    {
+      key: "slide2",
+      image: require("../../assets/home2.png"),
+    },
+    {
+      key: "slide3",
+      image: require("../../assets/home3.png"),
+    },
+  ];
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         keyboardDismissMode="on-drag"
         contentContainerStyle={styles.scrollContainer}
       >
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
         <NavBar />
         <CategoryList />\
-        <SliderHomeAd />
+        <Slider slides={slides} heightOfImage={180} />
         <DealOfDay />
         <SpecialBanner />
         <TrendingProducts />
-        {/* <TouchableOpacity onPress={handleLogout}>
-          <Text>Log out</Text>
-        </TouchableOpacity> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -46,7 +52,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
   },
   scrollContainer: {
-    paddingTop: 40,
     gap: 16,
     alignItems: "center",
     paddingBottom: 24,

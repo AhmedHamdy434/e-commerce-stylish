@@ -1,16 +1,17 @@
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { COLORS } from "../../constants/theme";
-import NavBar from "../../components/NavBar";
-import FilterAndSort from "../../components/search/FilterAndSort";
 import {
   ProductType,
   searchFilterSortProducts,
 } from "../../firebase/firestore";
 import { useEffect, useState } from "react";
-import ProductCard from "../../components/ProductCard";
+import WishListAndSearchComponent from "../../components/WishListAndSearchComponent";
+import Loading from "../../components/Loading";
+import { NotFound } from "./NotFound";
 
 const Search = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   const handleFilterChange = async ({
     keyword,
     category,
@@ -25,53 +26,32 @@ const Search = () => {
       category,
       sortBy,
     });
-    console.log("data", data.length);
     setProducts(data);
   };
 
   useEffect(() => {
-    handleFilterChange({ keyword: "", category: "", sortBy: "" });
+    const fetchInitial = async () => {
+      try {
+        setIsLoading(true);
+        await handleFilterChange({ keyword: "", category: "", sortBy: "" });
+        setError(false);
+      } catch (err) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchInitial();
   }, []);
 
+  if (isLoading) return <Loading />;
+  if (!products || error) return <NotFound />;
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={styles.scrollContainer}
-      >
-        <NavBar />
-        <FilterAndSort
-          onFilterChange={handleFilterChange}
-          lengthOfSearch={products.length}
-        />
-        <View style={styles.mapping}>
-          {products.map((product) => (
-            <ProductCard isSearch key={product.title} product={product} />
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <WishListAndSearchComponent
+      products={products}
+      handleFilterChange={handleFilterChange}
+    />
   );
 };
 
 export default Search;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
-  scrollContainer: {
-    paddingTop: 40,
-    gap: 16,
-    alignItems: "center",
-    paddingBottom: 24,
-  },
-  mapping: {
-    paddingHorizontal: 16,
-    width: "100%",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-  },
-});

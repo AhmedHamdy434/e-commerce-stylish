@@ -6,7 +6,7 @@ const Star = ({ rate }: { rate: number }) => {
   const stars = Array(5).fill(0);
 
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row", gap: 4 }}>
       {stars.map((_, i) => (
         <View key={i}>
           <FontAwesome

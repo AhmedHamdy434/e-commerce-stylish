@@ -12,6 +12,7 @@ export const COLORS = {
   main2: "#FF4B26",
   main3: "#FE735C",
   main4: "#FD6E87",
+  main5: "#FA7189",
   text2: "#A8A8A9",
   gray: "#A0A0A1",
   dark: "#17223B",

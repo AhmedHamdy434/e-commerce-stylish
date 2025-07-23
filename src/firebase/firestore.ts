@@ -21,11 +21,16 @@ export type ProductType = {
   oldPrice: number;
   discount: number;
   rate: number;
-  sizes: string;
+  sizes: string[];
   title: string;
   views: number;
 };
-type SortOption = "priceAsc" | "priceDesc" | "discount" | "views" | "rate";
+export type SortOption =
+  | "priceAsc"
+  | "priceDesc"
+  | "discount"
+  | "views"
+  | "rate";
 
 const products = [
   {
@@ -360,16 +365,41 @@ export const addProduct = async (product: ProductType) => {
   }
 };
 
-export const getProductById = async (id: string) => {
+export const getProductById = async (id: string): Promise<ProductType> => {
   try {
     const productRef = doc(firestore, "products", id);
     const snapshot = await getDoc(productRef);
-    return snapshot.exists() ? snapshot.data() : null;
+    if (!snapshot.exists()) {
+      throw new Error("Product not found");
+    }
+    return snapshot.data() as ProductType;
   } catch (error) {
-    console.error("Error getting product:", error);
-    return null;
+    throw new Error("Product not found");
   }
 };
+export const getProductsByIds = async (
+  ids: string[]
+): Promise<ProductType[]> => {
+  try {
+    const productPromises = ids.map(async (id) => {
+      const ref = doc(firestore, "products", id);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return snap.data() as ProductType;
+      }
+      return null;
+    });
+
+    const results = await Promise.all(productPromises);
+    return results.filter(
+      (product): product is ProductType => product !== null
+    );
+  } catch (error) {
+    console.error("Error getting products by IDs:", error);
+    return [];
+  }
+};
+
 export const filterByName = async (keyword: string) => {
   try {
     const snapshot = await getDocs(collection(firestore, "products"));
@@ -389,7 +419,7 @@ export const getMostViewed = async (n: number) => {
     limit(n)
   );
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs.map((doc) => doc.data()) as ProductType[];
 };
 
 export const filterByCategory = async (category: string) => {
@@ -435,7 +465,7 @@ export const getMostDiscount = async (n: number) => {
     limit(n)
   );
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs.map((doc) => doc.data()) as ProductType[];
 };
 
 ////////////////main function

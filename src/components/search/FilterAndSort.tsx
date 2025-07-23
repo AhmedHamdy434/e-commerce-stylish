@@ -1,4 +1,3 @@
-import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import {
   ScrollView,
@@ -67,7 +66,7 @@ const FilterAndSort = ({ onFilterChange, lengthOfSearch }: Props) => {
         />
       </View>
       <View style={styles.container}>
-        <Text style={styles.title}>{lengthOfSearch} items</Text>{" "}
+        <Text style={styles.title}>{lengthOfSearch} items</Text>
       </View>
       <ScrollView
         horizontal
@@ -94,7 +93,6 @@ const FilterAndSort = ({ onFilterChange, lengthOfSearch }: Props) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

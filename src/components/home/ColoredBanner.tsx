@@ -1,15 +1,22 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { COLORS, FONTS } from "../../constants/theme";
 import CountdownTimer from "../CountdownTimer";
-import { Link, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../navigation";
 
 const ColoredBanner = ({ isBlue }: { isBlue: boolean }) => {
+  type HomeScreenNavType = NativeStackNavigationProp<
+    RootStackParamList,
+    "HomeTabs"
+  >;
   const dateNow = new Date();
-  const navigaton = useNavigation();
+  const formattedDate = dateNow.toLocaleDateString("en-GB");
+  const navigation = useNavigation<HomeScreenNavType>();
   const styles = useStyles(isBlue);
-
+  const handlePress = () => navigation.navigate("Search" as never);
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
@@ -24,19 +31,14 @@ const ColoredBanner = ({ isBlue }: { isBlue: boolean }) => {
               style={{ flexDirection: "row", alignItems: "flex-end", gap: 4 }}
             >
               <AntDesign name="calendar" size={16} color={COLORS.white} />
-              <Text style={styles.timer}>
-                Last Date{" "}
-                {`${dateNow.getDate()}/${
-                  dateNow.getMonth() + 1
-                }/${dateNow.getFullYear()}`}
-              </Text>
+              <Text style={styles.timer}>Last Date {formattedDate}</Text>
             </View>
           )}
         </View>
-        <Link screen={"Search" as never} style={styles.viewAll}>
+        <Pressable onPress={handlePress} style={styles.viewAll}>
           <Text style={styles.text}>View all </Text>
           <AntDesign name="arrowright" size={12} color={COLORS.white} />
-        </Link>
+        </Pressable>
       </View>
     </View>
   );
@@ -67,14 +69,16 @@ const useStyles = (isBlue: boolean) =>
       fontFamily: FONTS.medium,
     },
     viewAll: {
-      color: COLORS.white,
       borderWidth: 2,
       borderColor: COLORS.white,
       borderRadius: 4,
       paddingHorizontal: 10,
       paddingVertical: 6,
+      flexDirection: "row",
+      alignItems: "center",
     },
     text: {
+      color: COLORS.white,
       fontSize: 12,
       lineHeight: 16,
       fontFamily: FONTS.semiBold,

@@ -1,14 +1,16 @@
 import {
-  Image,
+  Pressable,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
 } from "react-native";
-import React from "react";
 import { ProductType } from "../firebase/firestore";
 import { COLORS, FONTS, SIZES } from "../constants/theme";
 import Star from "./Star";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation";
+import ImageWithLoading from "./ImageWithLoading";
 
 const ProductCard = ({
   product,
@@ -22,6 +24,7 @@ const ProductCard = ({
   isSearch?: boolean;
 }) => {
   const {
+    id,
     title,
     mainImage,
     description,
@@ -32,8 +35,10 @@ const ProductCard = ({
     views,
   } = product;
   const { width } = useWindowDimensions();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   return (
-    <View
+    <Pressable
       style={[
         styles.container,
         {
@@ -41,9 +46,10 @@ const ProductCard = ({
           borderRadius: isSearch ? 8 : 4,
         },
       ]}
+      onPress={() => navigation.navigate("Details", { id: id })}
     >
       <View style={{ height: isDeal ? 124 : isTrend ? 100 : 200 }}>
-        <Image src={mainImage} resizeMode="cover" style={styles.image} />
+        <ImageWithLoading image={{ uri: mainImage }} />
       </View>
       <View style={[styles.textSection, { padding: isSearch ? 8 : 4 }]}>
         <Text
@@ -67,7 +73,7 @@ const ProductCard = ({
           </View>
         )}
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -80,11 +86,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: 124,
   },
-  image: {
-    borderRadius: 8,
-    width: "100%",
-    height: "100%",
-  },
+
   textSection: {
     color: COLORS.black,
     gap: 4,

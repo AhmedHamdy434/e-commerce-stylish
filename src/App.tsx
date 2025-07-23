@@ -11,6 +11,7 @@ import LogoSplashScreen from "./navigation/screens/LogoSplashScreen";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase/firebaseConfig";
 import { AuthNavigation } from "./navigation/AuthNavigator";
+import { UserDataProvider } from "./context/UserDataContext";
 
 export function App() {
   const [showLogo, setShowLogo] = useState(true);
@@ -68,18 +69,19 @@ export function App() {
 
   if (showLogo || !allLoaded)
     return <LogoSplashScreen onFinish={() => setShowLogo(false)} />;
-  if (!fontLoaded || isFirstLaunch === null || !authChecked) return null;
   if (isFirstLaunch)
     return <OnboardingSwiper onFinish={() => setIsFirstLaunch(false)} />;
   if (!user) return <AuthNavigation />;
 
   return (
-    <Navigation
-      // theme={theme}
-      linking={{
-        enabled: "auto",
-        prefixes: ["ecommerce://"],
-      }}
-    />
+    <UserDataProvider>
+      <Navigation
+        // theme={theme}
+        linking={{
+          enabled: "auto",
+          prefixes: ["ecommerce://"],
+        }}
+      />
+    </UserDataProvider>
   );
 }
