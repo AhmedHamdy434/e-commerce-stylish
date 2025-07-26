@@ -17,6 +17,7 @@ type Props = {
     sortBy: "priceAsc" | "priceDesc" | "discount" | "views" | "rate" | "";
   }) => void;
   lengthOfSearch: number;
+  initial?: string;
 };
 
 const categories = ["", "men", "women", "kids"];
@@ -29,9 +30,9 @@ const sortOptions = [
   { label: "Top Rated", value: "rate" },
 ];
 
-const FilterAndSort = ({ onFilterChange, lengthOfSearch }: Props) => {
+const FilterAndSort = ({ onFilterChange, lengthOfSearch, initial }: Props) => {
   const [keyword, setKeyword] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(initial || "");
   const [sortBy, setSortBy] = useState<
     "" | "priceAsc" | "priceDesc" | "discount" | "views" | "rate"
   >("");

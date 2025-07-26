@@ -29,14 +29,8 @@ const CountdownTimer = () => {
           .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`
       );
     };
-
-    // Initial call
     updateCountdown();
-
-    // Update every second
     const timer = setInterval(updateCountdown, 1000);
-
-    // Clear interval on unmount
     return () => clearInterval(timer);
   }, []);
 

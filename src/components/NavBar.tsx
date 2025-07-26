@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { COLORS, FONTS, SIZES } from "../constants/theme";
 
 const NavBar = () => {
@@ -8,14 +8,12 @@ const NavBar = () => {
         <Image source={require("../assets/Logo.png")} style={styles.logo} />
         <Text style={styles.text}>Stylish</Text>
       </View>
-      <TouchableOpacity>
-        <Image
-          source={{
-            uri: "https://img.icons8.com/ios-filled/50/user-male-circle.png",
-          }}
-          style={styles.avatar}
-        />
-      </TouchableOpacity>
+      <Image
+        source={{
+          uri: "https://img.icons8.com/ios-filled/50/user-male-circle.png",
+        }}
+        style={styles.avatar}
+      />
     </View>
   );
 };

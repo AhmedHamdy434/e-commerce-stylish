@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
   SafeAreaView,
 } from "react-native";
 import Swiper from "react-native-swiper";

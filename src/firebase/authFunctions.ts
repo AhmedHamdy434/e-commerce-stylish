@@ -1,13 +1,10 @@
 import {
-  // GoogleAuthProvider,
-  // signInWithCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   validatePassword,
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
-// import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
 interface AuthResponse {
@@ -83,30 +80,3 @@ export const logout = async (): Promise<AuthResponse> => {
     return { success: false, message: error.message };
   }
 };
-
-// 4. Google Sign-In Hook for React Component
-// export const useGoogleSignIn = () => {
-//   const [request, response, promptAsync] = Google.useAuthRequest({
-//     expoClientId: "YOUR_EXPO_CLIENT_ID",
-//     iosClientId: "YOUR_IOS_CLIENT_ID",
-//     androidClientId: "YOUR_ANDROID_CLIENT_ID",
-//     webClientId: "YOUR_WEB_CLIENT_ID",
-//   });
-
-// call this after user taps the "Sign in with Google" button
-// const handleGoogleSignIn = async () => {
-//   const result = await promptAsync();
-//   return result;
-// };
-
-// useEffect or logic to listen for `response` and complete sign in
-// const processGoogleSignIn = async () => {
-//   if (response?.type === "success") {
-//     const { id_token } = response.params;
-//     const credential = GoogleAuthProvider.credential(id_token);
-//     return await signInWithCredential(auth, credential);
-//   }
-// };
-
-//   return { request, promptAsync, response, handleGoogleSignIn, processGoogleSignIn };
-// };

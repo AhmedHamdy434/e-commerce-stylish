@@ -2,11 +2,17 @@ import { StyleSheet, Text, View } from "react-native";
 import SpecialButtons from "./SpecialButtons";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 
-const AddToCartButtonContainer = ({ id }: { id: string }) => {
+const AddToCartButtonContainer = ({
+  id,
+  sizes,
+}: {
+  id: string;
+  sizes: string[];
+}) => {
   return (
     <>
       <View style={styles.container}>
-        <SpecialButtons isCart id={id} />
+        <SpecialButtons isCart id={id} sizes={sizes} />
         <SpecialButtons isCart={false} id={id} />
       </View>
       <View style={styles.pinkContainer}>

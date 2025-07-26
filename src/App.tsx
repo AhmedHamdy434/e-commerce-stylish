@@ -1,7 +1,5 @@
 import { Assets as NavigationAssets } from "@react-navigation/elements";
-// import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Asset } from "expo-asset";
-// import { useColorScheme } from "react-native";
 import { Navigation } from "./navigation";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -28,10 +26,6 @@ export function App() {
     MontBold: require("../assets/fonts/Montserrat-Bold.ttf"),
     MontExBold: require("../assets/fonts/Montserrat-ExtraBold.ttf"),
   });
-  // const colorScheme = useColorScheme();
-
-  // const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
-
   useEffect(() => {
     const prepare = async () => {
       try {
@@ -76,7 +70,6 @@ export function App() {
   return (
     <UserDataProvider>
       <Navigation
-        // theme={theme}
         linking={{
           enabled: "auto",
           prefixes: ["ecommerce://"],

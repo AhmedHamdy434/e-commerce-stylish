@@ -1,26 +1,50 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
+import { useUserData } from "../../context/UserDataContext";
 
-const Sizes = ({ sizes }: { sizes: string[] }) => {
+const Sizes = ({
+  sizes,
+  selectedSize,
+  id,
+}: {
+  sizes: string[];
+  selectedSize?: string;
+  id?: string;
+}) => {
   const [activeSize, setActiveSize] = useState(0);
+  const { updateCartSize } = useUserData();
+
+  const handleSelect = async (index: number) => {
+    if (!id) return;
+    const selectedSize = sizes[index];
+    await updateCartSize(id, selectedSize);
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.head}>Size: {sizes[activeSize]}</Text>
+      {!id && <Text style={styles.head}>Size: {sizes[activeSize]}</Text>}
       <View style={styles.sizesContainer}>
         {sizes.map((size, i) => (
           <Pressable
             style={[
               styles.sizeBox,
-              activeSize === i ? styles.activeBox : styles.inActiveBox,
+              (!id && activeSize === i) || (id && selectedSize === size)
+                ? styles.activeBox
+                : styles.inActiveBox,
+              id && { paddingVertical: 2, paddingHorizontal: 4 },
             ]}
-            onPress={() => setActiveSize(i)}
+            onPress={() => {
+              id ? handleSelect(i) : setActiveSize(i);
+            }}
             key={size}
           >
             <Text
               style={[
                 styles.text,
-                activeSize === i ? styles.activeText : styles.inActiveText,
+                (!id && activeSize === i) || (id && selectedSize === size)
+                  ? styles.activeText
+                  : styles.inActiveText,
+                { fontSize: id ? SIZES.small + 2 : SIZES.medium },
               ]}
             >
               {size}
@@ -62,7 +86,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: FONTS.semiBold,
-    fontSize: SIZES.medium,
   },
   activeText: {
     color: COLORS.white,

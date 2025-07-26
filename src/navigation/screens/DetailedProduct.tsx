@@ -48,7 +48,7 @@ const DetailedProduct = () => {
         <View style={styles.contain}>
           <Sizes sizes={sizes} />
           <FullDetails product={productData} />
-          <AddToCartButtonContainer id={id} />
+          <AddToCartButtonContainer sizes={sizes} id={id} />
           <Similar category={category} id={id} />
         </View>
       </ScrollView>

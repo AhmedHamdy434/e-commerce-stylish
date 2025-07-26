@@ -3,9 +3,13 @@ import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Home } from "./screens/Home";
 import { Profile } from "./screens/Profile";
-import { Settings } from "./screens/Settings";
 import { NotFound } from "./screens/NotFound";
-import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Feather,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import WishList from "./screens/WishList";
 import Cart from "./screens/Cart";
 import Search from "./screens/Search";
@@ -64,11 +68,11 @@ const HomeTabs = createBottomTabNavigator({
         ),
       },
     },
-    Setting: {
-      screen: Settings,
+    Profile: {
+      screen: Profile,
       options: {
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name="settings-outline" size={size} color={color} />
+          <AntDesign name="user" size={size} color={color} />
         ),
       },
     },
@@ -82,18 +86,6 @@ const RootStack = createNativeStackNavigator({
       screen: HomeTabs,
       options: {
         headerShown: false,
-      },
-    },
-    Profile: {
-      screen: Profile,
-      linking: {
-        path: ":user(@[a-zA-Z0-9-_]+)",
-        parse: {
-          user: (value) => value.replace(/^@/, ""),
-        },
-        stringify: {
-          user: (value) => `@${value}`,
-        },
       },
     },
     Details: {
@@ -136,12 +128,11 @@ export type HomeTabsParamList = {
   Home: undefined;
   Wishlist: undefined;
   Cart: undefined;
-  Search: undefined;
-  Setting: undefined;
+  Search: { filter?: string };
+  Profile: undefined;
 };
 export type RootStackParamList = {
   HomeTabs: undefined | { screen: keyof HomeTabsParamList };
-  Profile: { user: string };
   Details: { id: string };
   NotFound: undefined;
 };

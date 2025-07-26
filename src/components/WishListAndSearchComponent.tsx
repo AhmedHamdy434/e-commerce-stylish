@@ -23,11 +23,13 @@ type FunctionSearchType = {
     category: string;
     sortBy: any;
   }) => void;
+  filter?: string;
 };
 
 const WishListAndSearchComponent = ({
   products,
   handleFilterChange,
+  filter,
 }: FunctionSearchType) => {
   return (
     <SafeAreaView style={styles.container}>
@@ -45,6 +47,7 @@ const WishListAndSearchComponent = ({
           )}
           {handleFilterChange && (
             <FilterAndSort
+              initial={filter?.toLocaleLowerCase()}
               onFilterChange={handleFilterChange}
               lengthOfSearch={products.length}
             />

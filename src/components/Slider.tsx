@@ -16,7 +16,8 @@ const Slider = ({
   return (
     <Swiper
       ref={swiperRef}
-      loop
+      loop={false}
+      autoplay={false}
       showsPagination={true}
       dotColor={COLORS.dark}
       dotStyle={{ opacity: 0.2 }}

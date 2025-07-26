@@ -1,5 +1,4 @@
 import { FlatList, View, Text } from "react-native";
-import { useEffect, useState } from "react";
 import { getMostViewed, ProductType } from "../../firebase/firestore";
 import ProductCard from "../ProductCard";
 import ColoredBanner from "./ColoredBanner";

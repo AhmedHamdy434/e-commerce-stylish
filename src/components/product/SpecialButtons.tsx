@@ -1,17 +1,27 @@
-import { Pressable, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { Pressable, StyleSheet, Text, ToastAndroid } from "react-native";
 import { COLORS, FONTS } from "../../constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useUserData } from "../../context/UserDataContext";
 
-const SpecialButtons = ({ isCart, id }: { isCart: boolean; id: string }) => {
+const SpecialButtons = ({
+  isCart,
+  id,
+  sizes,
+}: {
+  isCart: boolean;
+  id: string;
+  sizes?: string[];
+}) => {
   const navigation = useNavigation();
   const { cart, handleAddToCart, handleRemoveFromCart } = useUserData();
-  const addedToCart = cart.includes(id);
+  const addedToCart = cart.some((item) => item.id === id);
 
   const handleAddOrRemoveCart = async () => {
-    addedToCart ? await handleRemoveFromCart(id) : await handleAddToCart(id);
+    addedToCart
+      ? await handleRemoveFromCart(id)
+      : sizes && (await handleAddToCart(id, sizes[0]));
     ToastAndroid.show(
       addedToCart ? "Item removed from Cart" : "Item added to Cart",
       ToastAndroid.SHORT

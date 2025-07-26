@@ -1,4 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { HomeTabsParamList } from "../../navigation";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 const CategoryIconAndName = ({
   category,
@@ -6,11 +10,21 @@ const CategoryIconAndName = ({
   category: { title: string; image: React.JSX.Element };
 }) => {
   const { title, image } = category;
+  const navigation =
+    useNavigation<BottomTabNavigationProp<HomeTabsParamList>>();
+  const handleNavigateToSearchScreen = () => {
+    navigation.navigate("Search", {
+      filter: title === "All" ? "" : title.toLocaleLowerCase(),
+    });
+  };
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      onPress={handleNavigateToSearchScreen}
+      style={styles.card}
+    >
       {image}
       <Text style={styles.name}>{title}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

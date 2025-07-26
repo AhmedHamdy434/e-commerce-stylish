@@ -13,25 +13,32 @@ import {
   addToCart,
   removeFromCart,
   decreaseCartQuantity,
+  updateCartItemSize,
 } from "../firebase/firestoreUser";
 
 const UserDataContext = createContext<UserDataContextType | null>(null);
 
 type UserDataContextType = {
   favorites: string[];
-  cart: string[];
+  cart: CartItem[];
   handleAddToFavorites: (productId: string) => Promise<void>;
   handleRemoveFromFavorites: (productId: string) => Promise<void>;
-  handleAddToCart: (productId: string) => Promise<void>;
+  handleAddToCart: (productId: string, size: string) => Promise<void>;
   handleRemoveFromCart: (productId: string) => Promise<void>;
   handleDecreaseCart: (productId: string) => Promise<void>;
   fetchFavorites: () => Promise<void>;
   fetchCart: () => Promise<void>;
+  updateCartSize: (productId: string, newSize: string) => Promise<void>;
+};
+export type CartItem = {
+  id: string;
+  quantity: number;
+  size: string | null;
 };
 
 export const UserDataProvider = ({ children }: { children: ReactNode }) => {
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [cart, setCart] = useState<string[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   // Fetch on mount
   useEffect(() => {
@@ -59,22 +66,57 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
     await removeFromFavorites(productId);
     setFavorites((prev) => prev.filter((id) => id !== productId));
   };
+  const handleAddToCart = async (productId: string, size: string) => {
+    await addToCart(productId, size);
 
-  const handleAddToCart = async (productId: string) => {
-    await addToCart(productId);
-    if (!cart.includes(productId)) {
-      setCart((prev) => [...prev, productId]);
-    }
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === productId);
+      if (existing) {
+        // update quantity and size if needed
+        return prev.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1, size }
+            : item
+        );
+      } else {
+        return [...prev, { id: productId, quantity: 1, size }];
+      }
+    });
   };
 
   const handleRemoveFromCart = async (productId: string) => {
     await removeFromCart(productId);
-    setCart((prev) => prev.filter((id) => id !== productId));
+    setCart((prev) => prev.filter((item) => item.id !== productId));
   };
 
   const handleDecreaseCart = async (productId: string) => {
     await decreaseCartQuantity(productId);
-    // optional: re-fetch or assume the item is still there
+
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === productId);
+      if (!existing) return prev;
+
+      if (existing.quantity > 1) {
+        return prev.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        );
+      } else {
+        // remove item if quantity becomes 0
+        return prev.filter((item) => item.id !== productId);
+      }
+    });
+  };
+
+  const updateCartSize = async (productId: string, newSize: string) => {
+    await updateCartItemSize(productId, newSize);
+
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === productId ? { ...item, size: newSize } : item
+      )
+    );
   };
 
   return (
@@ -89,6 +131,7 @@ export const UserDataProvider = ({ children }: { children: ReactNode }) => {
         handleDecreaseCart,
         fetchFavorites,
         fetchCart,
+        updateCartSize,
       }}
     >
       {children}

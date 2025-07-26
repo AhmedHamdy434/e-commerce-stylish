@@ -48,7 +48,7 @@ export const getFavorites = async () => {
 
 /////////  cart
 // ✅ Add to cart
-export const addToCart = async (id: string) => {
+export const addToCart = async (id: string, size: string) => {
   const userId = auth.currentUser?.uid;
   if (!userId) return;
 
@@ -59,10 +59,12 @@ export const addToCart = async (id: string) => {
     // increase quantity
     await updateDoc(ref, {
       quantity: existing.data().quantity + 1,
+      size: size,
     });
   } else {
     await setDoc(ref, {
       quantity: 1,
+      size: size,
       addedAt: new Date(),
     });
   }
@@ -107,46 +109,25 @@ export const getCartItems = async () => {
   const snapshot = await getDocs(
     collection(firestore, "users", userId, "cart")
   );
-  return snapshot.docs.map((doc) => doc.id);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    quantity: doc.data().quantity || 1,
+    size: doc.data().size || null,
+  }));
 };
-////  is in cart
-export const isInCart = async (productId: string): Promise<boolean> => {
-  const userId = auth.currentUser?.uid;
-  if (!userId) return false;
 
-  const ref = doc(firestore, "users", userId, "cart", productId);
-  const snap = await getDoc(ref);
-  return snap.exists();
-};
-////// addresse
-export const updateUserContactInfo = async (
-  address: string,
-  mobile: string
+// change size
+export const updateCartItemSize = async (
+  productId: string,
+  newSize: string
 ) => {
   const userId = auth.currentUser?.uid;
   if (!userId) return;
 
-  const ref = doc(firestore, "users", userId);
-  await setDoc(
-    ref,
-    {
-      address,
-      mobile,
-    },
-    { merge: true }
-  );
-};
+  const ref = doc(firestore, "users", userId, "cart", productId);
+  const existing = await getDoc(ref);
 
-export const getUserContactInfo = async () => {
-  const userId = auth.currentUser?.uid;
-  if (!userId) return null;
-
-  const ref = doc(firestore, "users", userId);
-  const docSnap = await getDoc(ref);
-
-  if (docSnap.exists()) {
-    return docSnap.data() as { address: string; mobile: string };
+  if (existing.exists()) {
+    await updateDoc(ref, { size: newSize });
   }
-
-  return null;
 };
